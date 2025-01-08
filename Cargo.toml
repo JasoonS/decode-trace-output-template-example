@@ -1,0 +1,15 @@
+[package]
+name = "aave-v3-decode-output-base"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hypersync-client = "0.17.2"
+alloy-dyn-abi = "0.8.0"
+alloy-json-abi = "0.8.0"
+anyhow = "1.0.89"
+tokio = { version = "1.40.0", features = ["full"] }
+hex = "0.4.3"
+alloy-primitives = "0.7.4"
+serde_json = "1.0.128"
+env_logger = "0.11.5"
