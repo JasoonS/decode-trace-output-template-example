@@ -20,7 +20,7 @@ async fn main() -> Result<()> {
             max_num_retries: Some(10),
             ..ClientConfig::default()
         })
-        .unwrap(),
+            .unwrap(),
     );
 
     let signature = Function::parse(GET_USER_ACCOUNT_DATA_SIGNATURE.as_ref())
@@ -38,8 +38,7 @@ async fn main() -> Result<()> {
             // "block": ["number", "timestamp"],
         }
     }))
-    .unwrap();
-
+        .unwrap();
     let decoder = CallDecoder::from_signatures(&[GET_USER_ACCOUNT_DATA_SIGNATURE]).unwrap();
 
     let config = StreamConfig {
@@ -75,6 +74,21 @@ async fn main() -> Result<()> {
                                 println!("Raw output: 0x{}", hex::encode(&output));
                                 // TODO: Decode the output
                                 println!("----------------------------------------");
+                                if let Some(results) = decoder.decode_output(&output, GET_USER_ACCOUNT_DATA_SIGNATURE).context("Failed to decode output")? {
+                                    let (total_collateral_base,_) = results[0].as_uint().unwrap();
+                                    let (total_debt_base,_) = results[1].as_uint().unwrap();
+                                    let (available_borrows_base,_) = results[2].as_uint().unwrap();
+                                    let (current_liquidation_threshold,_) = results[3].as_uint().unwrap();
+                                    let (ltv,_) = results[4].as_uint().unwrap();
+                                    let (health_factor,_) = results[5].as_uint().unwrap();
+
+                                    println!("total_collateral_base     {}", total_collateral_base);
+                                    println!("total_debt_base       {}", total_debt_base);
+                                    println!("available_borrows_base     {}", available_borrows_base);
+                                    println!("current_liquidation_threshold     {}", current_liquidation_threshold);
+                                    println!("ltv     {}", ltv );
+                                    println!("health_factor     {}", health_factor);
+                                }
                             }
                         }
                     }
